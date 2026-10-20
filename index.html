@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=0.5">
+  <title>Whiteboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="drawing.js" defer></script>
+  <style>
+    .toolbar-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 48px);
+      gap: 4px;
+      max-width: 200px; 
+      width: 100%;
+      justify-self: start;
+    }
+
+    .toolbar-grid button {
+      width: 100%;
+      height: 100%;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    header h1 {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Whiteboard</h1>
+    <div class="toolbar-grid" aria-label="Whiteboard tools">
+      <button id="clear-button" type="button">Clear</button>
+      <button type="button">Eraser</button>
+      <button type="button">Undo</button>
+      <button type="button">Redo</button>
+    </div>
+  </header>
+
+  <main>
+    <canvas id="whiteboard" aria-label="Drawing canvas"></canvas>
+  </main>
+</body>
+</html>
