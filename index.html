@@ -10,16 +10,18 @@
     .toolbar-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 48px);
+      grid-template-rows: repeat(3, 48px);
       gap: 4px;
-      max-width: 200px; 
+      max-width: 200px;
       width: 100%;
-      justify-self: start;
+      justify-items: stretch;
     }
 
     .toolbar-grid button {
       width: 100%;
       height: 100%;
+      box-sizing: border-box;
+      display: block;
     }
 
     header {
@@ -28,7 +30,16 @@
     }
 
     header h1 {
+      border: 2px solid #000000;
+      padding: 8px;
+      margin: 0;
+      font-weight: bold;
+      
+
       text-align: center;
+      color: #ffffff;
+      -webkit-text-stroke: 2px #000000;
+      text-shadow: 2px 2px 0 #000000;
     }
   </style>
 </head>
@@ -36,13 +47,24 @@
   <header>
     <h1>Whiteboard</h1>
     <div class="toolbar-grid" aria-label="Whiteboard tools">
-      <button id="clear-button" type="button">Clear</button>
-      <button type="button">Eraser</button>
-      <button type="button">Undo</button>
-      <button type="button">Redo</button>
+      <button id="clear-button" type="button" class="tool-button">Clear</button>
+      <button type="button" class="tool-button">Eraser</button>
+      <button type="button" class="tool-button">Undo</button>
+      <button type="button" class="tool-button">Redo</button>
+      <button type="button" class="tool-button">Save</button>
+      <button id="palette-toggle" type="button" aria-label="Open color palette">🖌️</button>
     </div>
   </header>
-
+<div id="color-picker" class="hidden">
+  <button class="color" data-color="#000000" style="background:#000000"></button>
+  <button class="color" data-color="#ff0000" style="background:#ff0000"></button>
+  <button class="color" data-color="#00ff00" style="background:#00ff00"></button>
+  <button class="color" data-color="#0000ff" style="background:#0000ff"></button>
+  <button class="color" data-color="#ff9900" style="background:#ff9900"></button>
+  <button class="color" data-color="#ffffff" style="background:#ffffff"></button>
+  <button class="color" data-color="#800080" style="background:#800080"></button>
+  <button id="close-picker" type="button">Close</button>
+</div>
   <main>
     <canvas id="whiteboard" aria-label="Drawing canvas"></canvas>
   </main>

@@ -1,0 +1,2 @@
+1. I used ai for this one issue when the css functionality refused to open and close the menu to the colors when you pressed the emoji for feedback; ai fixed it by removing the hide and show function and replacing it with the color picker option
+2.
