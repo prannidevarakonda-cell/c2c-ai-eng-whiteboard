@@ -19,3 +19,47 @@
   border-radius: 50%;
   cursor: pointer;
 }
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  width: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+main {
+  flex: 1;
+  min-height: 0;
+}
+
+
+#whiteboard {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+header {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+header button {
+  pointer-events: auto;
+}
+
+#color-picker {
+  z-index: 2;
+}
