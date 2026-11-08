@@ -20,6 +20,11 @@
   cursor: pointer;
 }
 
+.color[aria-pressed="true"] {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
 html,
 body {
   height: 100%;
@@ -50,6 +55,16 @@ main {
   touch-action: none;
 }
 
+#ruler-preview {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 header {
   position: relative;
   z-index: 1;
@@ -60,6 +75,39 @@ header button {
   pointer-events: auto;
 }
 
+.toolbar-grid button:active,
+#color-picker button:active {
+  filter: brightness(0.85);
+}
+
+.toolbar-grid button:focus-visible,
+#color-picker button:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.toolbar-grid button[aria-pressed="true"],
+#palette-toggle[aria-expanded="true"] {
+  box-shadow: inset 0 0 0 3px #2563eb;
+}
+
 #color-picker {
   z-index: 2;
+}
+
+.marker-size-control {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+  max-width: 200px;
+  gap: 4px;
+  font-size: 12px;
+  pointer-events: auto;
+}
+
+.marker-size-control input {
+  width: 100%;
+  margin: 0;
 }

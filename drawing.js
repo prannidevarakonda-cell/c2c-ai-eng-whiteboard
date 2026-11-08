@@ -1,11 +1,24 @@
 const canvas = document.getElementById("whiteboard");
 const context = canvas.getContext("2d");
+const previewCanvas = document.getElementById("ruler-preview");
+const previewContext = previewCanvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+previewCanvas.width = window.innerWidth;
+previewCanvas.height = window.innerHeight;
 
 const picker = document.getElementById("color-picker");
+const eraserButton = document.getElementById("eraser-button");
+const paletteToggle = document.getElementById("palette-toggle");
+const rulerButton = document.getElementById("Ruler-button");
 let color = "#000000";
 let drawing = false;
+let drawingWithRuler = false;
+let erasing = false;
+let rulerActive = false;
+let drawStart = null;
+
+const markerSizeSlider = document.getElementById("marker-size");
 
 function getPosition(event) {
   const box = canvas.getBoundingClientRect();
@@ -16,11 +29,25 @@ function getPosition(event) {
   };
 }
 
+function drawRulerPreview(point) {
+  previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+  previewContext.lineWidth = Number(markerSizeSlider.value);
+  previewContext.lineCap = "round";
+  previewContext.strokeStyle = erasing ? "#ffffff" : color;
+  previewContext.beginPath();
+  previewContext.moveTo(drawStart.x, drawStart.y);
+  previewContext.lineTo(point.x, point.y);
+  previewContext.stroke();
+}
+
 canvas.addEventListener("pointerdown", (event) => {
   drawing = true;
+  drawingWithRuler = rulerActive;
   canvas.setPointerCapture(event.pointerId);
 
   const point = getPosition(event);
+  drawStart = point;
+  context.lineWidth = Number(markerSizeSlider.value);
   context.beginPath();
   context.moveTo(point.x, point.y);
 });
@@ -29,36 +56,78 @@ canvas.addEventListener("pointermove", (event) => {
   if (!drawing) return;
 
   const point = getPosition(event);
-  context.lineWidth = 4;
+  if (drawingWithRuler) {
+    drawRulerPreview(point);
+    return;
+  }
+
   context.lineCap = "round";
+  context.globalCompositeOperation = erasing ? "destination-out" : "source-over";
   context.strokeStyle = color;
   context.lineTo(point.x, point.y);
   context.stroke();
 });
 
-canvas.addEventListener("pointerup", () => {
+canvas.addEventListener("pointerup", (event) => {
+  if (drawing && drawingWithRuler && drawStart) {
+    const point = getPosition(event);
+    previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    context.lineCap = "round";
+    context.globalCompositeOperation = erasing ? "destination-out" : "source-over";
+    context.strokeStyle = color;
+    context.beginPath();
+    context.moveTo(drawStart.x, drawStart.y);
+    context.lineTo(point.x, point.y);
+    context.stroke();
+  }
   drawing = false;
+  drawingWithRuler = false;
+  drawStart = null;
 });
 
 canvas.addEventListener("pointercancel", () => {
+  previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
   drawing = false;
+  drawingWithRuler = false;
+  drawStart = null;
 });
 
 document.getElementById("clear-button").addEventListener("click", () => {
   context.clearRect(0, 0, canvas.width, canvas.height);
+  previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
 });
 
-document.getElementById("palette-toggle").addEventListener("click", () => {
+eraserButton.addEventListener("click", () => {
+  erasing = !erasing;
+  eraserButton.setAttribute("aria-pressed", String(erasing));
+});
+
+rulerButton.addEventListener("click", () => {
+  rulerActive = !rulerActive;
+  rulerButton.setAttribute("aria-pressed", String(rulerActive));
+});
+
+paletteToggle.addEventListener("click", () => {
   picker.classList.toggle("hidden");
+  const isOpen = !picker.classList.contains("hidden");
+  paletteToggle.setAttribute("aria-expanded", String(isOpen));
+  paletteToggle.setAttribute("aria-label", isOpen ? "Close color palette" : "Open color palette");
 });
 
 document.getElementById("close-picker").addEventListener("click", () => {
   picker.classList.add("hidden");
+  paletteToggle.setAttribute("aria-expanded", "false");
+  paletteToggle.setAttribute("aria-label", "Open color palette");
 });
 
 document.querySelectorAll(".color").forEach((button) => {
   button.addEventListener("click", () => {
     color = button.dataset.color;
+    document.querySelectorAll(".color").forEach((colorButton) => {
+      colorButton.setAttribute("aria-pressed", String(colorButton === button));
+    });
     picker.classList.add("hidden");
+    paletteToggle.setAttribute("aria-expanded", "false");
+    paletteToggle.setAttribute("aria-label", "Open color palette");
   });
 });

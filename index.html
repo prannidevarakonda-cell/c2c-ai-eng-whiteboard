@@ -10,7 +10,7 @@
     .toolbar-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(3, 48px);
+      grid-template-rows: repeat(4, 48px);
       gap: 4px;
       max-width: 200px;
       width: 100%;
@@ -53,21 +53,37 @@
         <button id="undo-button" type="button" class="tool-button">Undo</button>
         <button id="redo-button" type="button" class="tool-button">Redo</button>
         <button id="save-button" type="button" class="tool-button">Save</button>
-        <button id="palette-toggle" type="button" aria-label="Open color palette">🖌️</button>
+        <button id="Load-button" type="button" class="tool-button">Load Drawing</button>
+        <button id="Ruler-button" type="button" class="tool-button"
+        aria-label="Toggle ruler" aria-pressed="false">📏</button>
+        <button id="palette-toggle" type="button" aria-label="Open color palette"
+        aria-expanded="false">🖌️</button>
+    </div>
+    <div class="marker-size-control">
+      <label for="marker-size">Marker Size:</label>
+      <input id="marker-size" type="range" min="2" max="16" step="1" value="4">
     </div>
   </header>
 <div id="color-picker" class="hidden">
-  <button class="color" data-color="#000000" style="background:#000000"></button>
-  <button class="color" data-color="#ff0000" style="background:#ff0000"></button>
-  <button class="color" data-color="#00ff00" style="background:#00ff00"></button>
-  <button class="color" data-color="#0000ff" style="background:#0000ff"></button>
-  <button class="color" data-color="#ff9900" style="background:#ff9900"></button>
-  <button class="color" data-color="#ffffff" style="background:#ffffff"></button>
-  <button class="color" data-color="#800080" style="background:#800080"></button>
+  <button class="color" type="button" data-color="#000000" aria-label="Black"
+  aria-pressed="true" style="background:#000000"></button>
+  <button class="color" type="button" data-color="#ff0000" aria-label="Red"
+  aria-pressed="false" style="background:#ff0000"></button>
+  <button class="color" type="button" data-color="#00ff00" aria-label="Green"
+  aria-pressed="false" style="background:#00ff00"></button>
+  <button class="color" type="button" data-color="#0000ff" aria-label="Blue"
+  aria-pressed="false" style="background:#0000ff"></button>
+  <button class="color" type="button" data-color="#ff9900" aria-label="Orange"
+  aria-pressed="false" style="background:#ff9900"></button>
+  <button class="color" type="button" data-color="#ffffff" aria-label="White"
+  aria-pressed="false" style="background:#ffffff"></button>
+  <button class="color" type="button" data-color="#800080" aria-label="Purple"
+  aria-pressed="false" style="background:#800080"></button>
   <button id="close-picker" type="button">Close</button>
 </div>
   <main>
     <canvas id="whiteboard" aria-label="Drawing canvas"></canvas>
-  </main>
+  <canvas id="ruler-preview" aria-hidden="true"></canvas>
+</main>
 </body>
 </html>

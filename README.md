@@ -6,3 +6,11 @@ backend.py — Runs the server and handles backend logic, such as saving or load
 drawing.js — Implements the whiteboard’s interactive drawing behavior, such as mouse/touch input, colors, and clearing the canvas.
 index.html — Defines the page structure, including the drawing canvas and any toolbar controls
 style.css - Controls the pages appearance, including color  and styling
+
+
+Drawing System; pointerdown method starts when the code reads the pointers position, reads the slider's current value, and tells the canvas to start a new path on the next coordinate. every time you draw the stroke, the code adds each new position to the path. pointerup method ends the stroke.
+
+
+Possible problem: When I tried adding new butonns/features to my code, the layout was messed up and uneven, which was not in the layout of 2x4 I planned. One quick fix was simply making the 8 buttons in a neat 2x4 grid and the same siZe.
+
+The ruler button shows a movable, rotatable guide. When it is active, drawing strokes snap to the guide's edge for straight lines.
