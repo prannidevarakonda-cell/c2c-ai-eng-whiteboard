@@ -13,6 +13,7 @@ save a server copy in the project folder, start the backend with
 `python backend.py` and open http://127.0.0.1:8000; the server copy is saved as
 `saved_drawing.png`.
 
+----------------------------------------------------------------------------------------------------------------------------------------------
 
 Drawing System; pointerdown method starts when the code reads the pointers position, reads the slider's current value, and tells the canvas to start a new path on the next coordinate. every time you draw the stroke, the code adds each new position to the path. pointerup method ends the stroke.
 

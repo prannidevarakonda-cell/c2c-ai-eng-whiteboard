@@ -90,6 +90,12 @@ drawingFileInput.addEventListener("change", async () => {
       image.close();
     }
     showDrawingStatus("Drawing loaded.");
+    setTimeout(() => {
+      if (drawingStatus.textContent === "Drawing loaded.") {
+        showDrawingStatus("");
+      }
+    }, 2000);
+    
   } catch (error) {
     console.error("Could not load drawing:", error);
     showDrawingStatus(`Could not load drawing: ${error.message}`);
