@@ -53,16 +53,18 @@
         <button id="undo-button" type="button" class="tool-button">Undo</button>
         <button id="redo-button" type="button" class="tool-button">Redo</button>
         <button id="save-button" type="button" class="tool-button">Save</button>
-        <button id="Load-button" type="button" class="tool-button">Load Drawing</button>
+        <button id="load-button" type="button" class="tool-button">Load Drawing</button>
         <button id="Ruler-button" type="button" class="tool-button"
         aria-label="Toggle ruler" aria-pressed="false">📏</button>
         <button id="palette-toggle" type="button" aria-label="Open color palette"
         aria-expanded="false">🖌️</button>
     </div>
+    <input id="drawing-file" type="file" accept="image/png" hidden>
     <div class="marker-size-control">
       <label for="marker-size">Marker Size:</label>
       <input id="marker-size" type="range" min="2" max="16" step="1" value="4">
     </div>
+    <output id="drawing-status" aria-live="polite"></output>
   </header>
 <div id="color-picker" class="hidden">
   <button class="color" type="button" data-color="#000000" aria-label="Black"

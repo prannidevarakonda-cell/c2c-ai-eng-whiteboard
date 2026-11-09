@@ -11,6 +11,10 @@ const picker = document.getElementById("color-picker");
 const eraserButton = document.getElementById("eraser-button");
 const paletteToggle = document.getElementById("palette-toggle");
 const rulerButton = document.getElementById("Ruler-button");
+const saveButton = document.getElementById("save-button");
+const loadButton = document.getElementById("load-button");
+const drawingFileInput = document.getElementById("drawing-file");
+const drawingStatus = document.getElementById("drawing-status");
 let color = "#000000";
 let drawing = false;
 let drawingWithRuler = false;
@@ -19,6 +23,80 @@ let rulerActive = false;
 let drawStart = null;
 
 const markerSizeSlider = document.getElementById("marker-size");
+
+function showDrawingStatus(message) {
+  drawingStatus.textContent = message;
+}
+
+saveButton.addEventListener("click", async () => {
+  saveButton.disabled = true;
+  showDrawingStatus("Preparing PNG download...");
+
+  const downloadLink = document.createElement("a");
+  downloadLink.href = canvas.toDataURL("image/png");
+  downloadLink.download = "whiteboard.png";
+  downloadLink.click();
+
+  try {
+    const drawing = await new Promise((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error("Could not create a PNG image."));
+        }
+      }, "image/png");
+    });
+
+    if (window.location.protocol === "file:") {
+      showDrawingStatus("Drawing downloaded as whiteboard.png.");
+      return;
+    }
+
+    const response = await fetch("/api/drawing", {
+      method: "POST",
+      headers: { "Content-Type": "image/png" },
+      body: drawing
+    });
+
+    if (response.status !== 204) {
+      throw new Error(`Save failed (HTTP ${response.status}).`);
+    }
+
+    showDrawingStatus("Drawing downloaded and saved to saved_drawing.png.");
+  } catch (error) {
+    console.warn("Could not save a server copy of the drawing:", error);
+    showDrawingStatus("Drawing downloaded as whiteboard.png. Server copy unavailable.");
+  } finally {
+    saveButton.disabled = false;
+  }
+});
+
+loadButton.addEventListener("click", () => {
+  drawingFileInput.click();
+});
+
+drawingFileInput.addEventListener("change", async () => {
+  const file = drawingFileInput.files[0];
+  if (!file) return;
+
+  showDrawingStatus("Loading drawing...");
+  try {
+    const image = await createImageBitmap(file);
+    try {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    } finally {
+      image.close();
+    }
+    showDrawingStatus("Drawing loaded.");
+  } catch (error) {
+    console.error("Could not load drawing:", error);
+    showDrawingStatus(`Could not load drawing: ${error.message}`);
+  } finally {
+    drawingFileInput.value = "";
+  }
+});
 
 function getPosition(event) {
   const box = canvas.getBoundingClientRect();
